@@ -165,10 +165,12 @@ class PieChartSectionData {
     this.titleStyle,
     String? title,
     BorderSide? borderSide,
+    this.borderGradient,
     this.badgeWidget,
     double? titlePositionPercentageOffset,
     double? badgePositionPercentageOffset,
-  })  : value = value ?? 10,
+  })  : assert(borderGradient == null || borderSide == null),
+        value = value ?? 10,
         color = color ?? Colors.cyan,
         radius = radius ?? 40,
         showTitle = showTitle ?? true,
@@ -206,6 +208,9 @@ class PieChartSectionData {
   /// Defines border stroke around the section
   final BorderSide borderSide;
 
+  /// Defines gradient border stroke around the section
+  final BorderGradient? borderGradient;
+
   /// Defines a widget that represents the section.
   ///
   /// This can be anything from a text, an image, an animation, and even a combination of widgets.
@@ -237,6 +242,7 @@ class PieChartSectionData {
     TextStyle? titleStyle,
     String? title,
     BorderSide? borderSide,
+    BorderGradient? borderGradient,
     Widget? badgeWidget,
     double? titlePositionPercentageOffset,
     double? badgePositionPercentageOffset,
@@ -250,6 +256,7 @@ class PieChartSectionData {
       titleStyle: titleStyle ?? this.titleStyle,
       title: title ?? this.title,
       borderSide: borderSide ?? this.borderSide,
+      borderGradient: borderGradient ?? this.borderGradient,
       badgeWidget: badgeWidget ?? this.badgeWidget,
       titlePositionPercentageOffset:
           titlePositionPercentageOffset ?? this.titlePositionPercentageOffset,
@@ -273,6 +280,7 @@ class PieChartSectionData {
       titleStyle: TextStyle.lerp(a.titleStyle, b.titleStyle, t),
       title: b.title,
       borderSide: BorderSide.lerp(a.borderSide, b.borderSide, t),
+      borderGradient: b.borderGradient,
       badgeWidget: b.badgeWidget,
       titlePositionPercentageOffset: lerpDouble(
         a.titlePositionPercentageOffset,
@@ -389,4 +397,11 @@ class PieChartDataTween extends Tween<PieChartData> {
   /// Lerps a [PieChartData] based on [t] value, check [Tween.lerp].
   @override
   PieChartData lerp(double t) => begin!.lerp(begin!, end!, t);
+}
+
+class BorderGradient {
+  BorderGradient({required this.width, required this.gradient});
+
+  final double width;
+  final Gradient gradient;
 }

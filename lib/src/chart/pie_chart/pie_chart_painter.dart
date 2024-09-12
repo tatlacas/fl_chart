@@ -319,18 +319,29 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     CanvasWrapper canvasWrapper,
     Size viewSize,
   ) {
-    if (section.borderSide.width != 0.0 &&
-        section.borderSide.color.opacity != 0.0) {
+    if (section.borderGradient != null ||
+        section.borderSide.width != 0.0 &&
+            section.borderSide.color.opacity != 0.0) {
       canvasWrapper
         ..saveLayer(
           Rect.fromLTWH(0, 0, viewSize.width, viewSize.height),
           Paint(),
         )
         ..clipPath(sectionPath);
+      if (section.borderGradient != null) {
+        _sectionStrokePaint
+          ..strokeWidth = section.borderGradient!.width * 2
+          ..setColorOrGradient(
+            null,
+            section.borderGradient!.gradient,
+            Rect.fromLTWH(0, 0, viewSize.width, viewSize.height),
+          );
+      } else {
+        _sectionStrokePaint
+          ..strokeWidth = section.borderSide.width * 2
+          ..color = section.borderSide.color;
+      }
 
-      _sectionStrokePaint
-        ..strokeWidth = section.borderSide.width * 2
-        ..color = section.borderSide.color;
       canvasWrapper
         ..drawPath(
           sectionPath,
